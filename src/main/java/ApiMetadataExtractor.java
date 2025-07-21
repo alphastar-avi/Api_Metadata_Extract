@@ -42,10 +42,9 @@ public class ApiMetadataExtractor {
                     }
 
                     if (!path.isEmpty()) {
-                        // Clean the path string by removing surrounding quotes
+                        // Clean the path 
                         System.out.println("   Path: " + path.replaceAll("^\"|\"$", ""));
                     }
-                    // Assuming one mapping annotation per method, so we can break
                     break;
                 }
             }
