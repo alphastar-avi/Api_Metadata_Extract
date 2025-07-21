@@ -26,23 +26,8 @@ This project extracts and prints metadata for Spring Boot REST API methods from 
    - By default, it parses `ApiController.java` in the project root. Change the file path in `ApiMetadataExtractor.java` as needed.
 
 ## Example Output
-```
-▶ Method: getUser
-   Return Type: ResponseEntity<User>
-   Annotation: GetMapping
-   Path: /users/{id}
-   Param: id (Long)
-      PathVariable
-   Param: role (String)
-      RequestParam
+<img width="975" height="393" alt="Screenshot 2025-07-21 at 7 11 39 PM" src="https://github.com/user-attachments/assets/0b771bdc-44a8-4f10-ba7f-cdd88fcbc606" />
 
-▶ Method: addProduct
-   Return Type: ResponseEntity<Product>
-   Annotation: PostMapping
-   Path: /products
-   Param: product (Product)
-      RequestBody
-```
 
 ---
 <img width="1564" height="3840" alt="API extract flow" src="https://github.com/user-attachments/assets/ef28edb9-50a6-41e8-8e5c-82144a26c9c1" />
