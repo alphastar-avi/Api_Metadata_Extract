@@ -11,7 +11,7 @@ import java.io.File;
 
 public class ApiMetadataExtractor {
     public static void main(String[] args) throws Exception {
-        // java source file
+        // extract java source file
         File file = new File("flat_file");
         CompilationUnit cu = StaticJavaParser.parse(file);
 
@@ -20,7 +20,7 @@ public class ApiMetadataExtractor {
             System.out.println("\u25B6 Signature: " + method.getName());
             System.out.println("   Return Type: " + method.getType());
 
-            // find HTTP method and path
+            // find HTTP method and path 
             for (AnnotationExpr annotation : method.getAnnotations()) {
                 String annotationName = annotation.getNameAsString();
 
@@ -33,7 +33,7 @@ public class ApiMetadataExtractor {
                     String path = "";
                     if (annotation.isSingleMemberAnnotationExpr()) {       // eg.@GetMapping("/users")
                         path = annotation.asSingleMemberAnnotationExpr().getMemberValue().toString();
-                    } else if (annotation.isNormalAnnotationExpr()) {      // eg. @GetMapping(value = "/users")
+                    } else if (annotation.isNormalAnnotationExpr()) {      // eg. @G(value = etMapping"/users")
                         path = annotation.asNormalAnnotationExpr().getPairs().stream()
                             .filter(p -> p.getNameAsString().equals("value") || p.getNameAsString().equals("path"))
                             .findFirst()
