@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class BasicSecurityThreatDetector {
 
-    // Define known security annotations. Add any from your framework.
+    // Define known security  annotations
     private static final List<String> SECURITY_ANNOTATIONS = Arrays.asList(
             "PreAuthorize",
             "Secured",
@@ -19,20 +19,20 @@ public class BasicSecurityThreatDetector {
     );
 
     public static void main(String[] args) throws Exception {
-        // Parse the specified Java source file
-        File file = new File("flat_file");
+        // Parse source codw
+        File file = new File("flat_file.java");
         CompilationUnit cu = StaticJavaParser.parse(file);
 
         System.out.println("--- Starting API Security Analysis ---");
 
-        // Loop through all methods in the file
+        //  Loop through all method - file 
         for (MethodDeclaration method : cu.findAll(MethodDeclaration.class)) {
-            // Only analyze methods that are API endpoints
+            // analyze methods w API endpoints
             if (method.getAnnotations().stream().anyMatch(a -> a.getNameAsString().endsWith("Mapping"))) {
                 System.out.println("\n▶ Analyzing Endpoint: " + method.getNameAsString());
                 System.out.println("   Signature: " + method.getDeclarationAsString());
 
-                // --- Run Security Checks ---
+                
                 checkForMissingAuthentication(method);
                 checkForMissingPagination(method);
                 checkIfDeprecated(method);
@@ -42,9 +42,9 @@ public class BasicSecurityThreatDetector {
         System.out.println("\n--- Analysis Complete ---");
     }
 
-    /**
-     * [API2/API5] Checks if an endpoint is missing common security annotations.
-     */
+    
+     // API2/API5 - endpoint for missing common security annotations.
+     
     private static void checkForMissingAuthentication(MethodDeclaration method) {
         boolean hasSecurityAnnotation = method.getAnnotations().stream()
                 .anyMatch(a -> SECURITY_ANNOTATIONS.contains(a.getNameAsString()));
@@ -54,12 +54,12 @@ public class BasicSecurityThreatDetector {
         }
     }
 
-    /**
-     * [API4] Checks if an endpoint returns a List without pagination parameters.
-     */
+    
+     // API4 endpoint returns a List without limits 
+     
     private static void checkForMissingPagination(MethodDeclaration method) {
         String returnType = method.getType().asString();
-        // Updated to also check inside generic wrappers like ResponseEntity
+        
         if (returnType.contains("List<") || returnType.contains("Collection<") || returnType.contains("Set<")) {
             Set<String> paramNames = method.getParameters().stream()
                     .map(p -> p.getName().asString())
@@ -71,28 +71,26 @@ public class BasicSecurityThreatDetector {
         }
     }
     
-    /**
-     * [API9] Checks if an endpoint is marked as deprecated.
-     */
+    // dpoint is marked as deprecated.
+     
     private static void checkIfDeprecated(MethodDeclaration method) {
         if (method.isAnnotationPresent("Deprecated")) {
-            System.out.println("   ⚠️ WARNING (API9): Endpoint is deprecated. Ensure it's tracked and scheduled for removal.");
+            System.out.println("   ⚠️ WARNING (API9): Endpoint is deprecated. Ensure it's tracked and scheduled for removal. ");
         }
     }
 
-    /**
-     * [API3] Checks if an endpoint returns a raw entity instead of a DTO.
-     * This is a heuristic check assuming DTOs end with "DTO".
-     */
+    
+     //[API3] Checks if an endpoint returns a raw entity instead of a DTO.
+    
     private static void checkForEntityReturn(MethodDeclaration method) {
         String returnType = method.getTypeAsString();
-        // Ignore primitive types, void, and common Java types
+    
         if (returnType.equals("void") || returnType.matches("String|Integer|Long|Boolean|Double|ResponseEntity<Void>")) {
             return;
         }
 
         if (!returnType.endsWith("DTO") && !returnType.contains("DTO>")) {
-            System.out.println("   ⚠️ WARNING (API3): Endpoint may be returning a raw entity ('" + returnType + "') instead of a DTO.");
+            System.out.println("   ⚠️ WARNING (API3): Endpoint may be returning a raw entity ('" + returnType + "') instead of a DTO. ");
         }
     }
 }
